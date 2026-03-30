@@ -19,6 +19,27 @@ services:
       DB_USER: ${MYSQL_USER:-app_user}
       DB_PASSWORD: ${MYSQL_PASSWORD:-app_password}
 
+  backoffice:
+    build:
+      context: .
+      dockerfile: docker/php-apache/Dockerfile
+    container_name: guerre_irana_backoffice
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${BACKOFFICE_PORT:-8090}:80"
+    volumes:
+      - ../backoffice:/var/www/html
+      - ./:/var/www/frontoffice
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ${MYSQL_DATABASE:-iran_info_site}
+      DB_USER: ${MYSQL_USER:-app_user}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-app_password}
+
   db:
     image: mysql:8.4
     container_name: guerre_irana_db

@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Normalize /index.php to root
+RewriteCond %{THE_REQUEST} \s/+index\.php(?:[?\s]|$) [NC]
+RewriteRule ^index\.php$ ./ [R=301,L]
+
+# Let existing files and folders pass through
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route all clean URLs to index.php
+RewriteRule ^ index.php [L,QSA]
