@@ -1,0 +1,29 @@
+Options +FollowSymlinks
+RewriteEngine On
+
+# Redirect legacy modules.php URLs to clean routes
+RewriteCond %{THE_REQUEST} \s/+package/modules\.php\?page=actualites&p=1\s [NC]
+RewriteRule ^package/modules\.php$ /actualites.html? [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+package/modules\.php\?page=actualites&p=([0-9]+)\s [NC]
+RewriteRule ^package/modules\.php$ /actualites-%1.html? [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+package/modules\.php\?page=actualites\s [NC]
+RewriteRule ^package/modules\.php$ /actualites.html? [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+package/modules\.php\?page=article&slug=([A-Za-z0-9-]+)\s [NC]
+RewriteRule ^package/modules\.php$ /article/%1.html? [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+package/modules\.php(?:\s|\?) [NC]
+RewriteRule ^package/modules\.php$ /? [R=301,L]
+
+RewriteRule ^actualites-1\.html$ /actualites.html [R=301,L,NC]
+
+# Home and news pages
+RewriteRule ^$ package/modules.php [L,QSA,NC]
+RewriteRule ^actualites\.html$ package/modules.php?page=actualites&p=1 [L,QSA,NC]
+RewriteRule ^actualites-([0-9]+)\.html$ package/modules.php?page=actualites&p=$1 [L,QSA,NC]
+RewriteRule ^article/([A-Za-z0-9-]+)$ /article/$1.html [R=301,L,NC]
+RewriteRule ^article/([A-Za-z0-9-]+)\.html$ package/modules.php?page=article&slug=$1 [L,QSA,NC]
+
+
