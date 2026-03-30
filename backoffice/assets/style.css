@@ -144,6 +144,14 @@ body {
     color: #304355;
 }
 
+.login-panel {
+    max-width: 520px;
+}
+
+.login-form {
+    grid-template-columns: 1fr;
+}
+
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
