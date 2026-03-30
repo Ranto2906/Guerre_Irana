@@ -31,6 +31,10 @@
 - [ ] Eviter les doublons avec et sans slash final
 - [ ] Bloquer ou normaliser les parametres inutiles (?id=...)
 
+Brancher ces modèles dans modules.php pour afficher une vraie page accueil et liste.
+Créer les routes FrontOffice via votre .htaccess vers des contrôleurs/pages dédiés.
+Ajouter des vues simples dans assets et les pages 404/500.
+
 ## 4. FrontOffice
 - [ ] Creer la page d'accueil (dernieres actualites + dossiers mis en avant)
 - [ ] Creer la liste des articles avec pagination
@@ -81,8 +85,6 @@
 - [ ] Repasser les tests jusqu'a score cible (ex: >= 90)
 
 ## 9. Securite minimale
-- [ ] Hash des mots de passe (argon2 ou bcrypt)
-- [ ] Proteger les formulaires avec token CSRF
 - [ ] Valider et nettoyer toutes les entrees utilisateur
 - [ ] Proteger le backoffice par controle de role
 - [ ] Limiter les tentatives de connexion
