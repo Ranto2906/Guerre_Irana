@@ -920,5 +920,21 @@ if ($module === 'articles' && ($action === 'create' || $action === 'edit')) {
                 <?php require __DIR__ . '/pages/timeline-events-form.php'; ?>
             <?php endif; ?>
     </main>
+    <?php if ($module === 'articles' && ($action === 'create' || $action === 'edit')): ?>
+        <script src="https://cdn.jsdelivr.net/npm/tinymce@6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: '#content-editor',
+                menubar: false,
+                plugins: 'lists link table',
+                toolbar: 'undo redo | blocks | bold italic underline removeformat | alignleft aligncenter alignright | bullist numlist | link table',
+                block_formats: 'Paragraphe=p;Titre 1=h1;Titre 2=h2;Titre 3=h3;Titre 4=h4;Titre 5=h5;Titre 6=h6',
+                branding: false,
+                height: 420,
+                statusbar: true,
+                language: 'fr'
+            });
+        </script>
+    <?php endif; ?>
 </body>
 </html>

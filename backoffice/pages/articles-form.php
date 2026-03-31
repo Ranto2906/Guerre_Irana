@@ -1,3 +1,4 @@
+
 <section class="panel">
     <h3>Formulaire article</h3>
     <form method="post" action="<?php echo e(buildUrl('articles', $action)); ?>" class="form-grid" enctype="multipart/form-data">
@@ -74,7 +75,8 @@
 
         <label class="full">
             Contenu
-            <textarea name="content" rows="12" required><?php echo e((string) ($formValues['content'] ?? '')); ?></textarea>
+            <textarea id="content-editor" name="content" rows="12" required><?php echo e((string) ($formValues['content'] ?? '')); ?></textarea>
+            <small>Utilise les titres H1 a H6 pour structurer le texte.</small>
         </label>
 
         <label class="full">
