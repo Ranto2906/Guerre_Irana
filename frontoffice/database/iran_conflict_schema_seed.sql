@@ -50,6 +50,7 @@ CREATE TABLE users (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+
 -- -----------------------------------------------------
 -- Conflits (niveau macro)
 -- -----------------------------------------------------

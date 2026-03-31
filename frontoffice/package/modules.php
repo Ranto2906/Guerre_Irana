@@ -249,6 +249,7 @@ try {
 
 $homeUrl = '/';
 $newsUrl = buildNewsUrl(1);
+$backofficeUrl = '/admin';
 $styleUrl = '/package/assets/css/style.css';
 
 $pageTitle = 'Iran Info - Guerre Iran-Irak';
@@ -309,6 +310,7 @@ if ($view === 'actualites') {
 			<nav>
 				<a class="nav-link <?php echo $view === 'home' ? 'active' : ''; ?>" href="<?php echo e($homeUrl); ?>">Accueil</a>
 				<a class="nav-link <?php echo ($view === 'actualites' || $view === 'article') ? 'active' : ''; ?>" href="<?php echo e($newsUrl); ?>">Actualites</a>
+				<a class="nav-link nav-link-admin" href="<?php echo e($backofficeUrl); ?>">Backoffice</a>
 			</nav>
 		</div>
 	</header>

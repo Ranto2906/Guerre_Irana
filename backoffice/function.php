@@ -207,17 +207,38 @@ function formatDateTime(?string $value): string
 
 function articleUploadDirectory(): string
 {
-    return dirname(__DIR__)
-        . DIRECTORY_SEPARATOR
-        . 'frontoffice'
-        . DIRECTORY_SEPARATOR
-        . 'package'
-        . DIRECTORY_SEPARATOR
-        . 'assets'
-        . DIRECTORY_SEPARATOR
-        . 'images'
-        . DIRECTORY_SEPARATOR
-        . 'uploads';
+    $baseDir = dirname(__DIR__);
+
+    $candidates = [
+        $baseDir
+            . DIRECTORY_SEPARATOR
+            . 'frontoffice'
+            . DIRECTORY_SEPARATOR
+            . 'package'
+            . DIRECTORY_SEPARATOR
+            . 'assets'
+            . DIRECTORY_SEPARATOR
+            . 'images'
+            . DIRECTORY_SEPARATOR
+            . 'uploads',
+        $baseDir
+            . DIRECTORY_SEPARATOR
+            . 'package'
+            . DIRECTORY_SEPARATOR
+            . 'assets'
+            . DIRECTORY_SEPARATOR
+            . 'images'
+            . DIRECTORY_SEPARATOR
+            . 'uploads',
+    ];
+
+    foreach ($candidates as $candidate) {
+        if (is_dir($candidate)) {
+            return $candidate;
+        }
+    }
+
+    return $candidates[0];
 }
 
 function articleUploadPublicPrefix(): string

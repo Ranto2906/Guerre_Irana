@@ -628,34 +628,35 @@ if ($module === 'articles' && ($action === 'create' || $action === 'edit')) {
     <meta name="description" content="<?php echo e($metaDescription); ?>">
     <meta name="author" content="Guerre Irana">
     <meta name="robots" content="index,follow">
-    <meta name="theme-color" content="#0f3d62">
+    <meta name="theme-color" content="#c23b22">
     <title><?php echo e($pageTitle); ?></title>
     <link rel="stylesheet" href="<?php echo e($stylesheetUrl); ?>">
 </head>
 <body>
-    <div class="layout">
-        <aside class="sidebar">
-            <h1>Backoffice</h1>
-            <p class="subtitle">Gestion des contenus</p>
-            <nav class="menu">
+    <header class="admin-header">
+        <div class="wrap topbar admin-topbar">
+            <p class="brand"><a href="<?php echo e(buildUrl('dashboard', 'view')); ?>">Backoffice</a></p>
+
+            <nav class="admin-nav" aria-label="Navigation backoffice">
                 <?php if ($isAuthenticated): ?>
                     <?php foreach ($moduleLabels as $moduleKey => $label): ?>
-                        <a class="menu-link <?php echo $module === $moduleKey ? 'active' : ''; ?>" href="<?php echo e(buildUrl($moduleKey)); ?>">
+                        <a class="nav-link <?php echo $module === $moduleKey ? 'active' : ''; ?>" href="<?php echo e(buildUrl($moduleKey)); ?>">
                             <?php echo e($label); ?>
                         </a>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </nav>
-            <div class="sidebar-foot">
-                <?php if ($isAuthenticated): ?>
-                    <a href="<?php echo e(buildUrl('logout', 'view')); ?>">Se deconnecter</a>
-                    <br>
-                <?php endif; ?>
-                <a href="<?php echo e($frontofficeModulesUrl); ?>">Voir le FrontOffice</a>
-            </div>
-        </aside>
 
-        <main class="content">
+            <div class="admin-tools">
+                <a class="nav-link" href="<?php echo e($frontofficeModulesUrl); ?>">FrontOffice</a>
+                <?php if ($isAuthenticated): ?>
+                    <a class="nav-link nav-link-danger" href="<?php echo e(buildUrl('logout', 'view')); ?>">Deconnexion</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap admin-main">
             <header class="page-head">
                 <h2><?php echo e($currentModuleLabel); ?></h2>
                 <?php if ($module !== 'dashboard' && $action === 'list'): ?>
@@ -918,7 +919,6 @@ if ($module === 'articles' && ($action === 'create' || $action === 'edit')) {
             <?php if ($module === 'timeline_events' && ($action === 'create' || $action === 'edit')): ?>
                 <?php require __DIR__ . '/pages/timeline-events-form.php'; ?>
             <?php endif; ?>
-        </main>
-    </div>
+    </main>
 </body>
 </html>

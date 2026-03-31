@@ -12,6 +12,7 @@ services:
       - "${APP_PORT:-8080}:80"
     volumes:
       - ./:/var/www/html
+      - ../backoffice:/var/www/html/admin
     environment:
       DB_HOST: db
       DB_PORT: 3306
