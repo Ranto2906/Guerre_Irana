@@ -207,17 +207,21 @@ function formatDateTime(?string $value): string
 
 function articleUploadDirectory(): string
 {
-    return dirname(__DIR__)
-        . DIRECTORY_SEPARATOR
-        . 'frontoffice'
-        . DIRECTORY_SEPARATOR
-        . 'package'
-        . DIRECTORY_SEPARATOR
-        . 'assets'
-        . DIRECTORY_SEPARATOR
-        . 'images'
-        . DIRECTORY_SEPARATOR
-        . 'uploads';
+    $uploadsDir = null;
+    
+    if (is_dir('/var/www/html/package/assets/images/uploads')) {
+        $uploadsDir = '/var/www/html/package/assets/images/uploads';
+    } elseif (is_dir('/var/www/frontoffice/package/assets/images/uploads')) {
+        $uploadsDir = '/var/www/frontoffice/package/assets/images/uploads';
+    } elseif (is_dir('/var/www/html/package/assets/images')) {
+        $uploadsDir = '/var/www/html/package/assets/images/uploads';
+    } elseif (is_dir('/var/www/frontoffice/package/assets')) {
+        $uploadsDir = '/var/www/frontoffice/package/assets/images/uploads';
+    } else {
+        $uploadsDir = '/var/www/html/package/assets/images/uploads';
+    }
+    
+    return $uploadsDir;
 }
 
 function articleUploadPublicPrefix(): string
@@ -236,6 +240,7 @@ function processArticleCoverUpload(?array $file, string $slug): array
     ];
 
     if (!is_array($file) || !isset($file['error'])) {
+        $result['error'] = 'Aucun fichier envoye';
         return $result;
     }
 
@@ -264,13 +269,13 @@ function processArticleCoverUpload(?array $file, string $slug): array
     $size = (int) ($file['size'] ?? 0);
 
     if ($tmpName === '' || !is_uploaded_file($tmpName)) {
-        $result['error'] = 'Le fichier transmis est invalide.';
+        $result['error'] = 'Le fichier transmis est invalide. tmp_name=' . $tmpName;
 
         return $result;
     }
 
     if ($size <= 0 || $size > (5 * 1024 * 1024)) {
-        $result['error'] = 'Le fichier doit faire moins de 5 Mo.';
+        $result['error'] = 'Le fichier doit faire moins de 5 Mo. size=' . $size;
 
         return $result;
     }
@@ -285,23 +290,40 @@ function processArticleCoverUpload(?array $file, string $slug): array
     ];
 
     if (!array_key_exists($mimeType, $allowedMimeToExt)) {
-        $result['error'] = 'Format non autorise. Utilise JPG, PNG ou WEBP.';
+        $result['error'] = 'Format non autorise. Utilise JPG, PNG ou WEBP. mime=' . $mimeType;
 
         return $result;
     }
 
     $directory = articleUploadDirectory();
-    if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
-        $result['error'] = 'Impossible de preparer le dossier de televersement.';
-
+    
+    if (!is_dir($directory)) {
+        $parentDir = dirname($directory);
+        if (!is_dir($parentDir)) {
+            @mkdir($parentDir, 0777, true);
+        }
+        @mkdir($directory, 0777, true);
+        @chmod($directory, 0777);
+    }
+    
+    if (!is_dir($directory)) {
+        $result['error'] = 'Le dossier de televersement n existe pas et n a pas pu etre cree: ' . $directory;
         return $result;
+    }
+    
+    if (!is_writable($directory)) {
+        @chmod($directory, 0777);
+        if (!is_writable($directory)) {
+            $result['error'] = 'Le dossier de televersement n est pas accessible en ecriture: ' . $directory;
+            return $result;
+        }
     }
 
     $fileName = slugify($slug) . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $allowedMimeToExt[$mimeType];
     $destination = $directory . DIRECTORY_SEPARATOR . $fileName;
 
     if (!move_uploaded_file($tmpName, $destination)) {
-        $result['error'] = 'Echec lors de l enregistrement du fichier.';
+        $result['error'] = 'Echec lors de l enregistrement du fichier. dest=' . $destination;
 
         return $result;
     }

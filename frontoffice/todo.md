@@ -79,3 +79,23 @@ Colonnes: ID | Lot | Sous-lot | Page/Module | Tache | Type | Responsable | Est(h
 | 73 | DELIV | Zip | livraison | Zip livrable (site + conteneurs) | Integration | BINOME | 1 | 0 | 1 | 0,00% |
 | 74 | DELIV | Repo | git | Depot public (gitlab/github) | Integration | BINOME | 1 | 0 | 1 | 0,00% |
 | 75 | DELIV | Demo | final | Recette finale + demo | QA | BINOME | 1 | 0 | 1 | 0,00% |
+
+
+
+https://upload.wikimedia.org/wikipedia/commons/6/6d/Iran-Iraq_War%2C_color_photos_%E2%80%93_Defapress_%2824%29.jpg
+
+https://upload.wikimedia.org/wikipedia/commons/4/45/Meeting_of_the_Foreign_Ministers_of_Iran_and_Turkey_Avash_%28November_30%2C_2025%29_12.jpg
+
+https://upload.wikimedia.org/wikipedia/commons/d/d9/Tankers_at_the_Iraqi_Al_Basra_Oil_Terminal_in_the_Northern_Arabian_Gulf.jpg
+
+
+https://upload.wikimedia.org/wikipedia/commons/f/f0/Desmond_Swayne_with_Syrian_refugees_at_Azraq_Refugee_Camp_Jordan.jpg
+
+
+https://upload.wikimedia.org/wikipedia/commons/a/a7/Munich_Security_Conference_2015_by_Olaf_Kosinsky-153.jpg
+
+
+https://upload.wikimedia.org/wikipedia/commons/7/72/Tehran_Night_Panorama.jpg
+
+
+https://upload.wikimedia.org/wikipedia/commons/d/db/Flickr_-_Official_U.S._Navy_Imagery_-_U.S._Navy_ships_transit_the_Strait_of_Hormuz..jpg
