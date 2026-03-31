@@ -46,12 +46,12 @@ function envValue(string $key, string $default = ''): string
 
 function backofficeAuthUsername(): string
 {
-    return envValue('BACKOFFICE_AUTH_USER', 'admin');
+    return envValue('BACKOFFICE_AUTH_USER', 'user');
 }
 
 function backofficeAuthPassword(): string
 {
-    return envValue('BACKOFFICE_AUTH_PASS', 'admin123');
+    return envValue('BACKOFFICE_AUTH_PASS', 'pass');
 }
 
 function isBackofficeAuthenticated(): bool
@@ -207,38 +207,17 @@ function formatDateTime(?string $value): string
 
 function articleUploadDirectory(): string
 {
-    $baseDir = dirname(__DIR__);
-
-    $candidates = [
-        $baseDir
-            . DIRECTORY_SEPARATOR
-            . 'frontoffice'
-            . DIRECTORY_SEPARATOR
-            . 'package'
-            . DIRECTORY_SEPARATOR
-            . 'assets'
-            . DIRECTORY_SEPARATOR
-            . 'images'
-            . DIRECTORY_SEPARATOR
-            . 'uploads',
-        $baseDir
-            . DIRECTORY_SEPARATOR
-            . 'package'
-            . DIRECTORY_SEPARATOR
-            . 'assets'
-            . DIRECTORY_SEPARATOR
-            . 'images'
-            . DIRECTORY_SEPARATOR
-            . 'uploads',
-    ];
-
-    foreach ($candidates as $candidate) {
-        if (is_dir($candidate)) {
-            return $candidate;
-        }
-    }
-
-    return $candidates[0];
+    return dirname(__DIR__)
+        . DIRECTORY_SEPARATOR
+        . 'frontoffice'
+        . DIRECTORY_SEPARATOR
+        . 'package'
+        . DIRECTORY_SEPARATOR
+        . 'assets'
+        . DIRECTORY_SEPARATOR
+        . 'images'
+        . DIRECTORY_SEPARATOR
+        . 'uploads';
 }
 
 function articleUploadPublicPrefix(): string

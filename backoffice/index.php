@@ -713,7 +713,7 @@ if ($module === 'articles' && ($action === 'create' || $action === 'edit')) {
                             <button class="btn btn-primary" type="submit">Se connecter</button>
                         </div>
                     </form>
-                    <p>Identifiants configures via BACKOFFICE_AUTH_USER et BACKOFFICE_AUTH_PASS.</p>
+                    <!-- <p>Identifiants configures via BACKOFFICE_AUTH_USER et BACKOFFICE_AUTH_PASS.</p> -->
                 </section>
             <?php endif; ?>
 
