@@ -26,4 +26,9 @@ RewriteRule ^actualites-([0-9]+)\.html$ package/modules.php?page=actualites&p=$1
 RewriteRule ^article/([A-Za-z0-9-]+)$ /article/$1.html [R=301,L,NC]
 RewriteRule ^article/([A-Za-z0-9-]+)\.html$ package/modules.php?page=article&slug=$1 [L,QSA,NC]
 
+# Fallback: route any other path to app controller for custom 404 handling
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ package/modules.php?page=not_found&path=$1 [L,QSA,NC]
+
 

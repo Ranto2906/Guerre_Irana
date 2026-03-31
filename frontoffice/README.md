@@ -1,7 +1,8 @@
 # Projet Guerre Irana - Lancement avec Docker
 
 Cette configuration demarre:
-- PHP 8.2 + Apache
+- PHP 8.2 + Apache (frontoffice)
+- PHP 8.2 + Apache (backoffice)
 - MySQL 8.4
 
 Le serveur Apache est configure pour etre compatible avec le fichier `.htaccess` du projet:
@@ -25,13 +26,22 @@ Copy-Item .env.example .env
 
 ## 2) Lancer les conteneurs
 
+Depuis le dossier `frontoffice`:
+
 ```bash
 docker compose up -d --build
 ```
 
+Depuis la racine du projet (commande unique pour front + back + DB):
+
+```bash
+docker compose -f frontoffice/docker-compose.yml up -d --build
+```
+
 ## 3) Acces
 
-- Site: http://localhost:8080
+- FrontOffice: http://localhost:8080
+- BackOffice: http://localhost:8090/index.php
 - MySQL: localhost:3306
 
 ## 4) Arreter

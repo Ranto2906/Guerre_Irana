@@ -1,3 +1,4 @@
+-- Active: 1774873472354@@127.0.0.1@3306@iran_info_site
 -- =====================================================
 -- Projet: Site d'information sur les conflits impliquant l'Iran
 -- SGBD cible: MySQL 8+
@@ -49,6 +50,9 @@ CREATE TABLE users (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+INSERT INTO users (full_name, email, password_hash, role) VALUES
+('User Test', 'user', '$2y$10$7aQdJ0Qn7K1Yp6Fh3Q9mEu0Q6zZ8yRz8WJHqVYkF3WlYF9X1e2Z3a', 'admin');
+
 
 -- -----------------------------------------------------
 -- Conflits (niveau macro)

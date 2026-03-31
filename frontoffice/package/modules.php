@@ -216,11 +216,33 @@ $scriptPath = $_SERVER['PHP_SELF'] ?? '/package/modules.php';
 $pageParam = isset($_GET['page']) ? (string) $_GET['page'] : 'home';
 $articleSlug = trim((string) ($_GET['slug'] ?? ''));
 $view = 'home';
+$errorCode = null;
+$errorTitle = '';
+$errorDescription = '';
 
-if ($pageParam === 'actualites') {
+
+if ($pageParam === 'not_found') {
+	$view = 'not_found';
+	$errorCode = 404;
+	http_response_code(404);
+	$errorTitle = 'Page introuvable';
+	$errorDescription = 'La page demandee n existe pas ou plus. Retourne a l accueil ou consulte les actualites.';
+} elseif ($pageParam === 'actualites') {
 	$view = 'actualites';
 } elseif ($pageParam === 'article') {
 	$view = 'article';
+	if ($articleSlug === '') {
+		$errorCode = 404;
+		http_response_code(404);
+		$errorTitle = 'Article introuvable';
+		$errorDescription = 'Le lien de l article semble incomplet ou invalide. Retrouve les actualites sur la page liste.';
+	}
+} elseif ($pageParam !== 'home') {
+	$view = 'not_found';
+	$errorCode = 404;
+	http_response_code(404);
+	$errorTitle = 'Page introuvable';
+	$errorDescription = 'La page demandee n existe pas ou plus. Retourne a l accueil ou consulte les actualites.';
 }
 
 $currentPage = max(1, (int) ($_GET['p'] ?? 1));
@@ -233,22 +255,29 @@ $newsData = [
 $articleData = null;
 $errorMessage = '';
 
-try {
-	$frontOfficeModel = new FrontOfficeModel();
+if ($errorCode === null) {
+	try {
+		$frontOfficeModel = new FrontOfficeModel();
 
-	if ($view === 'home') {
-		$homeData = $frontOfficeModel->getHomePageData(6, 3);
-	} elseif ($view === 'actualites') {
-		$newsData = $frontOfficeModel->getArticlesPage($currentPage, 6);
-	} else {
-		$articleData = $frontOfficeModel->getArticleDetailBySlug($articleSlug);
+		if ($view === 'home') {
+			$homeData = $frontOfficeModel->getHomePageData(6, 3);
+		} elseif ($view === 'actualites') {
+			$newsData = $frontOfficeModel->getArticlesPage($currentPage, 6);
+		} elseif ($view === 'article') {
+			$articleData = $frontOfficeModel->getArticleDetailBySlug($articleSlug);
+		}
+	} catch (Throwable $exception) {
+		$errorMessage = 'Erreur de connexion ou de lecture des donnees: ' . $exception->getMessage();
+		$errorCode = 500;
+		http_response_code(500);
+		$errorTitle = 'Erreur serveur';
+		$errorDescription = 'Une erreur s est produite lors du chargement de la page. Merci de reessayer dans quelques instants.';
 	}
-} catch (Throwable $exception) {
-	$errorMessage = 'Erreur de connexion ou de lecture des donnees: ' . $exception->getMessage();
 }
 
 $homeUrl = '/';
 $newsUrl = buildNewsUrl(1);
+$backofficeUrl = '/admin';
 $styleUrl = '/package/assets/css/style.css';
 
 $pageTitle = 'Iran Info - Guerre Iran-Irak';
@@ -276,12 +305,31 @@ if ($view === 'actualites') {
 		$ogType = 'article';
 		$ogImageUrl = buildOptimizedImageUrl(getPreferredImageSource($articleData), 520);
 	} else {
+		$errorCode = $errorCode ?? 404;
 		http_response_code(404);
+		$errorTitle = 'Article introuvable';
+		$errorDescription = 'L article demande est introuvable. Consulte les actualites recentes ou retourne a l accueil.';
 		$pageTitle = 'Article introuvable | Iran Info';
 		$metaDescription = 'L article demande est introuvable. Consultez les actualites recentes sur la guerre Iran-Irak.';
 		$canonicalPath = '/actualites.html';
 		$ogImageUrl = '/package/assets/images/real/chronologie-khorramshahr-320.jpg';
 	}
+}
+
+if ($errorCode === 404) {
+	$pageTitle = $pageTitle === 'Iran Info - Guerre Iran-Irak' ? 'Page introuvable | Iran Info' : $pageTitle;
+	$metaDescription = $metaDescription === 'Informations verifiees sur la guerre Iran-Irak: actualites, analyses, chronologie et impacts humanitaires.'
+		? 'La ressource demandee est introuvable. Retourne a l accueil ou consulte les actualites.'
+		: $metaDescription;
+	$canonicalPath = $canonicalPath !== '/' ? $canonicalPath : '/';
+	$ogImageUrl = '/package/assets/images/real/chronologie-khorramshahr-320.jpg';
+}
+
+if ($errorCode === 500) {
+	$pageTitle = 'Erreur serveur | Iran Info';
+	$metaDescription = 'Une erreur s est produite. Merci de reessayer plus tard.';
+	$canonicalPath = '/';
+	$ogImageUrl = '/package/assets/images/real/impact-humain-defapress-320.jpg';
 }
 
 ?>
@@ -309,14 +357,25 @@ if ($view === 'actualites') {
 			<nav>
 				<a class="nav-link <?php echo $view === 'home' ? 'active' : ''; ?>" href="<?php echo e($homeUrl); ?>">Accueil</a>
 				<a class="nav-link <?php echo ($view === 'actualites' || $view === 'article') ? 'active' : ''; ?>" href="<?php echo e($newsUrl); ?>">Actualites</a>
+				<a class="nav-link nav-link-admin" href="<?php echo e($backofficeUrl); ?>">Backoffice</a>
 			</nav>
 		</div>
 	</header>
 
 	<main class="wrap">
-		<?php if ($errorMessage !== ''): ?>
-			<div class="notice"><?php echo e($errorMessage); ?></div>
-		<?php endif; ?>
+		<?php if ($errorCode !== null): ?>
+			<section class="hero">
+				<h1><?php echo e($errorTitle !== '' ? $errorTitle : ($errorCode === 404 ? 'Page introuvable' : 'Erreur serveur')); ?></h1>
+				<p><?php echo e($errorDescription !== '' ? $errorDescription : 'Un probleme est survenu.'); ?></p>
+				<?php if ($errorCode === 500 && $errorMessage !== ''): ?>
+					<div class="notice"><?php echo e($errorMessage); ?></div>
+				<?php endif; ?>
+				<div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+					<a class="nav-link" href="<?php echo e($homeUrl); ?>">Retour a l accueil</a>
+					<a class="nav-link" href="<?php echo e($newsUrl); ?>">Voir les actualites</a>
+				</div>
+			</section>
+		<?php else: ?>
 
 		<?php if ($view === 'home'): ?>
 			<section class="hero">
@@ -509,6 +568,7 @@ if ($view === 'actualites') {
 					<?php endif; ?>
 				</article>
 			<?php endif; ?>
+		<?php endif; ?>
 		<?php endif; ?>
 	</main>
 

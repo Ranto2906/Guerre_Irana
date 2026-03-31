@@ -6,6 +6,10 @@
     --accent: #c23b22;
     --accent-soft: #ffe7dc;
     --line: #e8ded2;
+    --danger: #8c2c1a;
+    --danger-soft: #fde5dc;
+    --ok: #227a3f;
+    --ok-soft: #e2f4e8;
 }
 
 * {
@@ -72,10 +76,24 @@ nav {
     background: #fff;
 }
 
+.nav-link:hover {
+    background: #fff7f2;
+}
+
 .nav-link.active {
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
+}
+
+.nav-link-admin {
+    border-color: #e8b8ab;
+    background: #fff6f2;
+    color: var(--danger);
+}
+
+.nav-link-admin:hover {
+    background: var(--danger-soft);
 }
 
 main {
